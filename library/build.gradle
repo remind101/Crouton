@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 apply plugin: 'com.android.library'
-apply plugin: 'android-maven'
-apply plugin: 'signing'
 
 dependencies {
   compile 'com.android.support:support-v4:21.0.3'
@@ -81,50 +79,4 @@ artifacts {
   archives sourcesJar
   archives javadocJar
   archives jar
-}
-
-signing {
-  sign configurations.archives
-  sign configurations.compile
-}
-
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-      repository(url: repositoryUrl) {
-        authentication(userName: sonatypeUser, password: sonatypePass)
-      }
-
-      pom.project {
-        inceptionYear '2012'
-        name 'Crouton'
-        artifactId = 'crouton'
-        packaging 'jar', 'aar'
-        description 'Context sensitive notifications for Android'
-        url 'https://github.com/keyboardsurfer/Crouton'
-
-        scm {
-          url 'scm:git@github.com:keyboardsurfer/Crouton.git'
-          connection 'scm:git@github.com:keyboardsurfer/Crouton.git'
-          developerConnection 'scm:git@github.com:keyboardsurfer/Crouton.git'
-        }
-
-        licenses {
-          license {
-            name 'The Apache Software License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            distribution 'repo'
-          }
-        }
-
-        developers {
-          developer {
-            id 'keyboardsurfer'
-            name 'Benjamin Weiss'
-          }
-        }
-      }
-    }
-  }
 }

@@ -259,7 +259,12 @@ final class Manager extends Handler {
       final int flags = activity.getWindow().getAttributes().flags;
       final int translucentStatusFlag = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
       if ((flags & translucentStatusFlag) == translucentStatusFlag) {
-        setActionBarMargin(params, activity);
+          final int actionBarContainerId = Resources.getSystem().getIdentifier("action_bar_container", "id", "android");
+          final View actionBarContainer = activity.findViewById(actionBarContainerId);
+          // The action bar is present: the app is using a Holo theme.
+          if (null != actionBarContainer) {
+              params.topMargin = actionBarContainer.getBottom();
+          }
       }
     }
   }
@@ -270,17 +275,13 @@ final class Manager extends Handler {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
       final boolean flags = activity.getWindow().hasFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
       if (flags) {
-        setActionBarMargin(params, activity);
+          final int actionBarContainerId = Resources.getSystem().getIdentifier("action_bar_container", "id", "android");
+          final View actionBarContainer = activity.findViewById(actionBarContainerId);
+          // The action bar is present: the app is using a Holo theme.
+          if (null != actionBarContainer) {
+              params.topMargin = actionBarContainer.getHeight();
+          }
       }
-    }
-  }
-
-  private void setActionBarMargin(ViewGroup.MarginLayoutParams params, Activity activity) {
-    final int actionBarContainerId = Resources.getSystem().getIdentifier("action_bar_container", "id", "android");
-    final View actionBarContainer = activity.findViewById(actionBarContainerId);
-    // The action bar is present: the app is using a Holo theme.
-    if (null != actionBarContainer) {
-      params.topMargin = actionBarContainer.getBottom();
     }
   }
 
