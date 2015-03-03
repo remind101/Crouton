@@ -34,6 +34,8 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+
+import java.lang.Exception;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -202,12 +204,17 @@ final class Manager extends Handler {
             new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       }
       // display Crouton in ViewGroup if it has been supplied
-      if (null != crouton.getViewGroup()) {
-        final ViewGroup croutonViewGroup = crouton.getViewGroup();
-        if (shouldAddViewWithoutPosition(croutonViewGroup)) {
-          croutonViewGroup.addView(croutonView, params);
-        } else {
-          croutonViewGroup.addView(croutonView, 0, params);
+      final ViewGroup croutonViewGroup = crouton.getViewGroup();
+      if (null != croutonViewGroup) {
+        try {
+            if (shouldAddViewWithoutPosition(croutonViewGroup)) {
+                croutonViewGroup.addView(croutonView, params);
+            } else {
+                croutonViewGroup.addView(croutonView, 0, params);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
         }
       } else {
         Activity activity = crouton.getActivity();
